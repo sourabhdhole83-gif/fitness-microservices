@@ -44,4 +44,9 @@ public class UserServiceImpl implements UserService {
 
         return response;
     }
+
+    @Override
+    public Boolean validateUserById(UUID id) {
+        return repository.existsById(id);
+    }
 }

@@ -23,7 +23,7 @@ public class Activity {
     @Id
     private String id;
 
-    private Long userId;
+    private UUID userId;
 
     private ActivityType type;
 

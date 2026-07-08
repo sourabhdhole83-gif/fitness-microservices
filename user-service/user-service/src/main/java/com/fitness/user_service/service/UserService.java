@@ -6,7 +6,9 @@ import com.fitness.user_service.dto.UserResponse;
 import java.util.UUID;
 
 public interface UserService {
-    public UserResponse register(UserRequest request);
+     UserResponse register(UserRequest request);
 
     UserResponse getUserProfile(UUID id);
+
+    Boolean validateUserById(UUID id);
 }

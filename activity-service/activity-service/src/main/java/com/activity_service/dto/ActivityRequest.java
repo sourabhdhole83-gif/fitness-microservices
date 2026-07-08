@@ -4,10 +4,11 @@ import com.activity_service.entity.ActivityType;
 import lombok.Data;
 import java.time.LocalDateTime;
 import java.util.Map;
+import java.util.UUID;
 
 @Data
 public class ActivityRequest {
-    private String userId;
+    private UUID userId;
 
     private ActivityType type;
 
