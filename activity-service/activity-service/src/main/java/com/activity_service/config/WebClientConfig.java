@@ -14,6 +14,8 @@ public class WebClientConfig {
         return WebClient.builder();
     }
 
+//    Spring Boot's default Builder bean does not have load balancing enabled thats why i am creating it explicitly and injecting in the second method
+
     @Bean
     public WebClient userServiceWebClient(WebClient.Builder builder){
         return builder.baseUrl("http://USER-SERVICE").build();
