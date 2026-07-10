@@ -9,11 +9,13 @@ import com.ai_service.dto.RecommendationResponse;
 import com.ai_service.entity.Activity;
 import com.ai_service.entity.Recommendation;
 import com.ai_service.repository.RecommendationRepo;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.Arrays;
+import java.util.Collections;
 
 @Service
 @Slf4j
@@ -32,11 +34,11 @@ public class ActivityAIService {
 
         log.info("Gemini Response : {}", geminiResponse);
 
-        String responseText = extractModelOutput(geminiResponse);
+        String responseText = extractModelOutput(geminiResponse);//Extracts the actual JSON text from Gemini response.
 
         try {
 
-            RecommendationResponse aiResponse =
+            RecommendationResponse aiResponse =   //Now JSON becomes a Java object.
                     objectMapper.readValue(
                             responseText,
                             RecommendationResponse.class
@@ -45,7 +47,9 @@ public class ActivityAIService {
             Recommendation recommendation =
                     buildRecommendation(activity, aiResponse);
 
-            return recommendationRepo.save(recommendation);
+
+            Recommendation saved = recommendationRepo.save(recommendation);
+            return saved;
 
         } catch (Exception e) {
 
@@ -59,31 +63,51 @@ public class ActivityAIService {
             Activity activity,
             RecommendationResponse aiResponse) {
 
-        Recommendation recommendation = new Recommendation();
+        try{
+            Recommendation recommendation = new Recommendation();
 
-        recommendation.setUserId(activity.getUserId());
-        recommendation.setActivityId(activity.getId());
+            recommendation.setUserId(activity.getUserId());
+             recommendation.setActivityId(activity.getId());
 
-        recommendation.setRecommendation(
-                aiResponse.getRecommendation());
+         recommendation.setRecommendation(
+            aiResponse.getRecommendation());
 
-        recommendation.setImprovement(
-                aiResponse.getImprovement());
+         recommendation.setImprovement(
+            aiResponse.getImprovement());
 
-        recommendation.setSuggestions(
-                aiResponse.getSuggestions());
+         recommendation.setSuggestions(
+            aiResponse.getSuggestions());
 
-        recommendation.setSafety(
-                aiResponse.getSafety());
+         recommendation.setSafety(
+            aiResponse.getSafety());
 
-        return recommendation;
+            return  recommendation;
+
+        }catch (Exception e){
+            e.printStackTrace();
+            return createDefaultRecommendation(activity);
+}
     }
 
-    private String extractModelOutput(GeminiResponse response) {
+    public Recommendation createDefaultRecommendation(Activity activity){
+        return Recommendation.builder()
+               .activityId(activity.getId())
+               .userId(activity.getUserId())
+               .recommendation("Unable to generate detailed analysis")
+               .improvement(Collections.singletonList("Continue with your current routine"))
+               .suggestions(Collections.singletonList("Consider consulting a fitness professional"))
+               .safety(Arrays.asList(
+                       "Always warm up before exercise",
+                       "Stay hydrated",
+                       "Listen to your body"))
+               .build();
+    }
+
+    private String extractModelOutput(GeminiResponse response) { //Extracts and returns the actual AI-generated text (model output) from the GeminiResponse object.
 
         for (Step step : response.getSteps()) {
 
-            if ("modal_output".equals(step.getType())) {
+            if ("model_output".equals(step.getType())) {
 
                 Content content =
                         step.getContent().get(0);

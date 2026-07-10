@@ -1,10 +1,13 @@
 package com.ai_service.service;
 
 import com.ai_service.dto.GeminiResponseDtos.GeminiResponse;
+import com.ai_service.exception.AIServiceException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
+
 import java.util.Map;
 
 @Service
@@ -28,12 +31,13 @@ public class GeminiService {
                 "model", "gemini-3.5-flash",   //body for postman
                 "input", prompt);
 
-        return webClient.post()
-                .uri(geminiApiUrl)
-                .header("x-goog-api-key", geminiApiKey)
-                .header("Content-Type", "application/json")
-                .bodyValue(requestBody)
-                .retrieve()
+        try {
+            return webClient.post()
+                    .uri(geminiApiUrl)
+                    .header("x-goog-api-key", geminiApiKey)
+                    .header("Content-Type", "application/json")
+                    .bodyValue(requestBody)//  in the post req i have to send body and the gemini also needs the body
+                    .retrieve()    //Clicking SEND button in Postman
 
 //                        .onStatus(
 //                        status -> status.value() == 429,
@@ -46,8 +50,14 @@ public class GeminiService {
 //                                    );
 //                                }))
 
-                .bodyToMono(GeminiResponse.class)
-                .block();
+                    .bodyToMono(GeminiResponse.class)//what the body is coming converts it into: GeminiResponse
+                    .block();
+
+        }catch(WebClientResponseException e){
+            log.error("Gemini API error",e);
+
+            throw new AIServiceException("AI service is temporarily unavailable",e);
+        }
 
     }
 }

@@ -17,4 +17,11 @@ public class GlobalExceptionHandler {
         ErrorDto errorDto = new ErrorDto(exception.getMessage(),request.getDescription(false),404, LocalDateTime.now());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorDto);
     }
+
+    @ExceptionHandler(AIServiceException.class)
+    public ResponseEntity<ErrorDto> aiServiceException(AIServiceException exception,WebRequest request){
+        ErrorDto errorDto = new ErrorDto(exception.getMessage(),request.getDescription(false),500,LocalDateTime.now());
+
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorDto);
+    }
 }
