@@ -48,8 +48,8 @@ public class ActivityAIService {
                     buildRecommendation(activity, aiResponse);
 
 
-            Recommendation saved = recommendationRepo.save(recommendation);
-            return saved;
+            return recommendationRepo.save(recommendation);
+
 
         } catch (Exception e) {
 
