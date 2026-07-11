@@ -59,5 +59,6 @@ public class GeminiService {
             throw new AIServiceException("AI service is temporarily unavailable",e);
         }
 
+
     }
 }
