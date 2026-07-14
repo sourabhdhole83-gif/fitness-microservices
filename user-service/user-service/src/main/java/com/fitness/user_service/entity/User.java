@@ -16,6 +16,8 @@ public class User {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    private String keycloakId;
+
     @Column(unique = true)
     private String email;
 
@@ -26,8 +28,8 @@ public class User {
 
     private String lastName;
 
-    @Enumerated(EnumType.STRING)
-    private  UserRole role = UserRole.USER;
+    @Enumerated(EnumType.STRING)//is a JPA annotation used to store an Enum value in the database as its name (String) instead of its ordinal number.
+    private UserRole role = UserRole.USER;
 
     @CreationTimestamp
     private LocalDateTime createdAt;

@@ -1,6 +1,6 @@
 package com.fitness.user_service.controller;
 
-import com.fitness.user_service.dto.UserRequest;
+import com.fitness.user_service.dto.RegisterRequest;
 import com.fitness.user_service.dto.UserResponse;
 import com.fitness.user_service.service.UserServiceImpl;
 import jakarta.validation.Valid;
@@ -17,9 +17,8 @@ public class UserController {
 
     private UserServiceImpl userService;
 
-
     @PostMapping("/register")
-    public ResponseEntity<UserResponse> resgisterUser(@Valid @RequestBody UserRequest request){
+    public ResponseEntity<UserResponse> resgisterUser(@Valid @RequestBody RegisterRequest request){
         return ResponseEntity.ok(userService.register(request));
     }
 

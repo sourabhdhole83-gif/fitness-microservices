@@ -9,6 +9,8 @@ import java.util.UUID;
 public class UserResponse {
     private UUID id;
 
+    private String keycloakId;
+
     private String email;
 
     private String firstName;
