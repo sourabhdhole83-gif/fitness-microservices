@@ -16,6 +16,7 @@ public class RegisterRequest {
     ,message =  "Password must be atlest 8 charachters and must have a capital and special symbol ")
     private String password;
 
+    private String keycloakId;
     @NotEmpty
     private String firstName;
 

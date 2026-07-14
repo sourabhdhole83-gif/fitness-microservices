@@ -10,5 +10,5 @@ public interface UserService {
 
     UserResponse getUserProfile(UUID id);
 
-    Boolean validateUserById(UUID id);
+    Boolean validateUserById(String id);
 }

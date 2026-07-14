@@ -46,7 +46,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Boolean validateUserById(UUID id) {
+    public Boolean validateUserById(String id) {
         return repository.existsByKeycloakId(id);
     }
 }
