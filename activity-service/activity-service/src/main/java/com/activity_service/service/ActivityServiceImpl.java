@@ -41,7 +41,7 @@ public class ActivityServiceImpl implements ActivityService {
         Activity saved = repository.save(activity);
 
         try {
-            kafkaTemplate.send(topicName, saved.getUserId().toString(),saved);
+            kafkaTemplate.send(topicName, saved.getUserId().toString(),saved);//topic name,key,object
         }catch (Exception e){
             e.printStackTrace();
         }

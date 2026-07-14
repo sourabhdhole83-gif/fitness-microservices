@@ -1,10 +1,9 @@
 package com.fitness.user_service.service;
 
-import com.fitness.user_service.dto.UserRequest;
+import com.fitness.user_service.dto.RegisterRequest;
 import com.fitness.user_service.dto.UserResponse;
 import com.fitness.user_service.entity.User;
 import com.fitness.user_service.exception.ResourceNotFoundException;
-import com.fitness.user_service.exception.UserNotFoundException;
 import com.fitness.user_service.mapper.UserMapper;
 import com.fitness.user_service.repository.UserRepository;
 import lombok.AllArgsConstructor;
@@ -21,10 +20,11 @@ public class UserServiceImpl implements UserService {
     private UserMapper mapper;
     private PasswordEncoder encoder;
 
-    public UserResponse register(UserRequest request) {
+    public UserResponse register(RegisterRequest request) {
 
         if(repository.existsByEmail(request.getEmail())==true){
-            throw new UserNotFoundException("User already exists with email: "+request.getEmail());
+            User existingUser = repository.findByEmail(request.getEmail());
+            UserResponse response = mapper.toResponse(existingUser );
         }
 
         User user = mapper.toEntity(request);
@@ -47,6 +47,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Boolean validateUserById(UUID id) {
-        return repository.existsById(id);
+        return repository.existsByKeycloakId(id);
     }
 }
