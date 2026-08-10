@@ -1,6 +1,7 @@
 package com.activity_service.service;
 
 import com.activity_service.Repository.ActivityRepository;
+import com.activity_service.client.UserValidationService;
 import com.activity_service.dto.ActivityRequest;
 import com.activity_service.dto.ActivityResponse;
 import com.activity_service.entity.Activity;
@@ -18,7 +19,7 @@ import org.springframework.stereotype.Service;
 public class ActivityServiceImpl implements ActivityService {
     private final ActivityRepository repository;
     private final ActivityMapper mapper;
-    private final UserValidationService userValidationService;
+    private final UserValidationService userValidationService;//spring injects the proxy of the class because it has the @CB
     private final KafkaTemplate<String,Activity> kafkaTemplate;
 
     @Value("${kafka.topic.name}")

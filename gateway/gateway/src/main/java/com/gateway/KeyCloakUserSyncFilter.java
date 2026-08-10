@@ -12,7 +12,6 @@ import org.springframework.web.server.ServerWebExchange;
 import org.springframework.web.server.WebFilter;
 import org.springframework.web.server.WebFilterChain;
 import reactor.core.publisher.Mono;
-
 import java.text.ParseException;
 import java.util.function.Consumer;
 
@@ -58,7 +57,7 @@ public class KeyCloakUserSyncFilter implements WebFilter {
 
         }
 
-        return null;
+        return chain.filter(exchange);
     }
 
     private RegisterRequest getUserDetails(String token) {//for extracting the token

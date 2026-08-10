@@ -25,6 +25,7 @@ public class UserServiceImpl implements UserService {
         if(repository.existsByEmail(request.getEmail())==true){
             User existingUser = repository.findByEmail(request.getEmail());
             UserResponse response = mapper.toResponse(existingUser );
+            return response;
         }
 
         User user = mapper.toEntity(request);
@@ -44,9 +45,14 @@ public class UserServiceImpl implements UserService {
 
         return response;
     }
+//
+//    @Override
+//    public Boolean validateUserById(String id) {
+//        return repository.existsByKeycloakId(id);
+//    }
 
     @Override
     public Boolean validateUserById(String id) {
-        return repository.existsByKeycloakId(id);
+        return repository.existsById(UUID.fromString(id));
     }
 }
