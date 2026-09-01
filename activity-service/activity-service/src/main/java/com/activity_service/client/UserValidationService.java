@@ -21,8 +21,8 @@ public class UserValidationService {
     private final WebClient userServiceWebClient;
 
     @RateLimiter(name = "activityLimiter",fallbackMethod = "rateLimiterFallback")
-    @Retry(name = "userServiceRetry",fallbackMethod = "userServiceFallback")
     @CircuitBreaker(name = "userServiceCB",fallbackMethod = "userServiceFallback")
+    @Retry(name = "userServiceRetry",fallbackMethod = "userServiceFallback")
     public boolean validateUser(UUID id) {
             return userServiceWebClient.get()
                     .uri("/api/users/{id}/validate", id)
